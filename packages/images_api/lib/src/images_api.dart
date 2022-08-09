@@ -9,7 +9,7 @@ class ImagesApi {
 /// {@template local_storage_api}
 /// A model of a LocalStorageAPI
 /// {@endtemplate}
-abstract class LocalStorageApi extends ImagesApi{
+abstract class LocalStorageApi extends ImagesApi {
   /// Inits the storage
   Future<void> init();
 
