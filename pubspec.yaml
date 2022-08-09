@@ -17,6 +17,7 @@ dependencies:
     sdk: flutter
   formz_input:
     path: packages/formz_input
+  hive_flutter: ^1.1.0
   images_api:
     path: packages/images_api
   images_repository:
