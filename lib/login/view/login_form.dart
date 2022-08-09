@@ -107,7 +107,7 @@ class _LoginButton extends StatelessWidget {
                   primary: const Color(0xFFFFD600),
                 ),
                 onPressed: state.status.isValidated
-                    ? () => context.read<LoginCubit>().logInWithCredentials()
+                    ? () => context.read<LoginCubit>().logIn()
                     : null,
                 child: const Text('LOGIN'),
               );
@@ -122,7 +122,7 @@ class _SignUpButton extends StatelessWidget {
     final theme = Theme.of(context);
     return TextButton(
       key: const Key('loginForm_createAccount_flatButton'),
-      onPressed: () => Navigator.of(context).push<void>(SignUpPage.route()),
+      onPressed: () {},
       child: Text(
         'CREATE ACCOUNT',
         style: TextStyle(color: theme.primaryColor),
