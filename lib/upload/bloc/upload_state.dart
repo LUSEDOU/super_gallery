@@ -1,32 +1,30 @@
 part of 'upload_bloc.dart';
 
-enum UploadStatus { empty, full, notEmpty }
-
-enum UploadStatusBody { initial, loading, saving, success, failure }
+enum UploadStatus { initial, loading, success, failure, full }
 
 class UploadState extends Equatable {
   const UploadState({
-    this.status = UploadStatus.empty,
-    this.statusBody = UploadStatusBody.initial,
+    this.status = UploadStatus.initial,
     this.urls = const [],
+    this.image,
   });
 
   final UploadStatus status;
-  final UploadStatusBody statusBody;
   final List<String> urls;
+  final String? image;
 
   UploadState copyWith({
     UploadStatus? status,
-    UploadStatusBody? statusBody,
     List<String>? urls,
+    String? image,
   }) {
     return UploadState(
       status: status ?? this.status,
-      statusBody: statusBody ?? this.statusBody,
       urls: urls ?? this.urls,
+      image: image ?? this.image,
     );
   }
 
   @override
-  List<Object> get props => [status, statusBody, urls];
+  List<Object?> get props => [image, status, urls];
 }

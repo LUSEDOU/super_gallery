@@ -26,6 +26,7 @@ dependencies:
   local_storage_images_api:
     path: packages/local_storage_images_api
   pinch_zoom: ^1.0.0
+  stream_transform: ^2.0.0
 
 dev_dependencies:
   bloc_test: ^9.0.3
