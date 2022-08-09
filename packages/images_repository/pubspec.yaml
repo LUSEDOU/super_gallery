@@ -12,5 +12,7 @@ dev_dependencies:
   very_good_analysis: ^3.0.1
 
 dependencies:
+  images_api:
+    path: ../images_api
   local_storage_images_api:
     path: ../local_storage_images_api
