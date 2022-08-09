@@ -18,8 +18,8 @@ class UploadUrlChange extends UploadEvent {
   List<Object> get props => [url];
 }
 
-class UploadSaveImage extends UploadEvent {
-  const UploadSaveImage({
+class UploadImageDelete extends UploadEvent {
+  const UploadImageDelete({
     required this.image,
   });
 
@@ -29,8 +29,33 @@ class UploadSaveImage extends UploadEvent {
   List<Object> get props => [image];
 }
 
-class UploadImageDelete extends UploadEvent {
-  const UploadImageDelete({
+class UploadImageSaveRequest extends UploadEvent {
+  const UploadImageSaveRequest();
+
+  @override
+  List<Object> get props => [];
+}
+
+class UploadImageSaved extends UploadEvent {
+  const UploadImageSaved();
+
+  @override
+  List<Object> get props => [];
+}
+
+class UploadFailureLoad extends UploadEvent {
+  const UploadFailureLoad({
+    this.errorMessage = 'Something wrong with the url',
+  });
+
+  final String errorMessage;
+
+  @override
+  List<Object> get props => [errorMessage];
+}
+
+class UploadImageChanged extends UploadEvent {
+  const UploadImageChanged({
     required this.image,
   });
 

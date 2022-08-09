@@ -1,14 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:images_repository/images_repository.dart';
 import 'package:super_gallery/upload/upload.dart';
 
 class UploadPage extends StatelessWidget {
-  const UploadPage({super.key});
+  const UploadPage({
+    required this.imagesRepository,
+    super.key,
+  });
+
+  final ImagesRepository imagesRepository;
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => UploadBloc(),
+      create: (context) => UploadBloc(imagesRepository: imagesRepository),
       child: _UploadView(),
     );
   }
@@ -17,7 +23,6 @@ class UploadPage extends StatelessWidget {
 class _UploadView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final _controller = TextEditingController();
     final size = MediaQuery.of(context).size;
 
     return Scaffold(
@@ -29,19 +34,14 @@ class _UploadView extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                TextField(
-                  controller: _controller,
-                  decoration: InputDecoration(
-                    prefixIcon: const Icon(Icons.search_rounded),
-                    suffixIcon: IconButton(
-                      onPressed: () => context
-                          .read<UploadBloc>()
-                          .add(UploadSaveImage(image: _controller.text)),
-                      icon: const Icon(Icons.cancel_rounded),
-                    ),
-                  ),
+                _UploadForm(),
+                SizedBox(
+                  width: size.width * 0.04,
                 ),
-                _UploadBody()
+                _BigImage(),
+                SizedBox(
+                  width: size.width * 0.04,
+                ),
               ],
             ),
           ),
@@ -51,29 +51,19 @@ class _UploadView extends StatelessWidget {
   }
 }
 
-class _UploadBody extends StatelessWidget {
+class _BigImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<UploadBloc, UploadState>(
       buildWhen: (previous, current) => previous.status != current.status,
       builder: (context, state) {
-        switch (state.status) {
-          case UploadStatus.initial:
-            break;
-          case UploadStatus.loading:
-            return const CircularProgressIndicator();
-          case UploadStatus.success:
-            return Image.asset(state.image ?? '');
-          case UploadStatus.full:
-            ScaffoldMessenger.of(context)
-              ..hideCurrentSnackBar()
-              ..showSnackBar(
-                const SnackBar(
-                  content: Text('5 is the maximum of uploads'),
-                ),
-              );
-            break;
-          case UploadStatus.failure:
+        return state.status == UploadStatus.initial
+            ? Container()
+            : Image(
+                image: NetworkImage(
+                  state.image,
+                ), /*
+          errorBuilder: (context, error, stackTrace) {
             ScaffoldMessenger.of(context)
               ..hideCurrentSnackBar()
               ..showSnackBar(
@@ -81,9 +71,97 @@ class _UploadBody extends StatelessWidget {
                   content: Text('URL wrong'),
                 ),
               );
-            break;
-        }
-        return const SizedBox();
+            context.read<UploadBloc>().add(const UploadFailureLoad());
+            return const CircularProgressIndicator();
+          },
+          loadingBuilder: (context, child, loadingProgress) {
+            context.read<UploadBloc>().add(const UploadImageSaved());
+            return const CircularProgressIndicator();
+          },*/
+              );
+      },
+    );
+  }
+}
+
+@immutable
+class _SmallImage extends StatelessWidget {
+  const _SmallImage({
+    super.key,
+    required this.image,
+  });
+
+  final String image;
+
+  @override
+  Widget build(BuildContext context) {
+    return image.isEmpty
+        ? Container(
+            color: Colors.red,
+            width: 9,
+            height: 9,
+          )
+        : GestureDetector(
+            child: AspectRatio(
+              aspectRatio: 1,
+              child: Image.network(image),
+            ),
+            onTap: () => context
+                .read<UploadBloc>()
+                .add(UploadImageChanged(image: image)),
+            onLongPress: () =>
+                context.read<UploadBloc>().add(UploadImageDelete(image: image)),
+          );
+  }
+}
+
+class _UploadForm extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final _controller = TextEditingController();
+
+    return TextField(
+      controller: _controller,
+      onChanged: (url) =>
+          context.read<UploadBloc>().add(UploadUrlChange(url: url)),
+      decoration: InputDecoration(
+        suffixIcon: IconButton(
+          onPressed: () =>
+              context.read<UploadBloc>().add(const UploadImageSaveRequest()),
+          icon: const Icon(Icons.save_alt_rounded),
+        ),
+      ),
+    );
+  }
+}
+
+// ignore: unused_element
+class _UploadImages extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<UploadBloc, UploadState>(
+      builder: (context, state) {
+        return Padding(
+          padding: const EdgeInsets.all(8),
+          child: ListView.separated(
+            scrollDirection: Axis.horizontal,
+            itemCount: 5,
+            itemBuilder: (context, index) => index >= state.urls.length
+                ? Container(
+                    color: Colors.red,
+                    height: 9,
+                    width: 9,
+                  )
+                : _SmallImage(
+                    image: state.urls[index],
+                    key: Key('SMALL_IMAGE_$index'),
+                  ),
+            separatorBuilder: (context, index) => const SizedBox(
+              width: 9,
+              height: 9,
+            ),
+          ),
+        );
       },
     );
   }

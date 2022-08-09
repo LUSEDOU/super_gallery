@@ -7,6 +7,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:images_repository/images_repository.dart';
+import 'package:local_storage_images_api/local_storage_images_api.dart';
 import 'package:super_gallery/l10n/l10n.dart';
 import 'package:super_gallery/upload/upload.dart';
 
@@ -27,7 +29,11 @@ class App extends StatelessWidget {
         GlobalMaterialLocalizations.delegate,
       ],
       supportedLocales: AppLocalizations.supportedLocales,
-      home: const UploadPage(),
+      home: UploadPage(
+        imagesRepository: CacheImagesRepository(
+          localStorageApi: LocalStorageImagesApi()..init(),
+        ),
+      ),
     );
   }
 }

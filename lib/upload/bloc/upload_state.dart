@@ -1,17 +1,17 @@
 part of 'upload_bloc.dart';
 
-enum UploadStatus { initial, loading, success, failure, full }
+enum UploadStatus { initial, loading, saving, success, failure }
 
 class UploadState extends Equatable {
   const UploadState({
     this.status = UploadStatus.initial,
     this.urls = const [],
-    this.image,
+    this.image = '',
   });
 
   final UploadStatus status;
   final List<String> urls;
-  final String? image;
+  final String image;
 
   UploadState copyWith({
     UploadStatus? status,
@@ -26,5 +26,5 @@ class UploadState extends Equatable {
   }
 
   @override
-  List<Object?> get props => [image, status, urls];
+  List<Object> get props => [image, status, urls];
 }
