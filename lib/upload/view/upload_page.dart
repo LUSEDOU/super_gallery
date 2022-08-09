@@ -8,7 +8,7 @@ class UploadPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => UploadCubit(),
+      create: (context) => UploadBloc(),
       child: _UploadView(),
     );
   }
