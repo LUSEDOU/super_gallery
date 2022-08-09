@@ -16,6 +16,7 @@ class LoginForm extends StatelessWidget {
             ..showSnackBar(
               SnackBar(
                 content: Text(state.errorMessage ?? 'Authentication Failure'),
+                // TODO(LUSEDOU): l10n.loginFormSnackBarErrorMessage
               ),
             );
         }
@@ -26,11 +27,6 @@ class LoginForm extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Image.asset(
-                'assets/bloc_logo_small.png',
-                height: 120,
-              ),
-              const SizedBox(height: 16),
               _EmailInput(),
               const SizedBox(height: 8),
               _PasswordInput(),
@@ -58,8 +54,11 @@ class _EmailInput extends StatelessWidget {
           keyboardType: TextInputType.emailAddress,
           decoration: InputDecoration(
             labelText: 'email',
+            // TODO(lusedou): l10n.loginFormEmailTextFieldLabelText
             helperText: '',
+            // TODO(lusedou): l10n.loginFormEmailTextFieldHelperText
             errorText: state.email.invalid ? 'invalid email' : null,
+            // TODO(lusedou): l10n.loginFormEmailTextFieldErrorText
           ),
         );
       },
@@ -80,8 +79,11 @@ class _PasswordInput extends StatelessWidget {
           obscureText: true,
           decoration: InputDecoration(
             labelText: 'password',
+            // TODO(lusedou): l10n.loginFormPasswordTextFieldLabelText
             helperText: '',
+            // TODO(lusedou): l10n.loginFormPasswordTextFieldHelperText
             errorText: state.password.invalid ? 'invalid password' : null,
+            // TODO(lusedou): l10n.loginFormPasswordTextFieldErrorText,
           ),
         );
       },
@@ -109,6 +111,7 @@ class _LoginButton extends StatelessWidget {
                     ? () => context.read<LoginCubit>().logIn()
                     : null,
                 child: const Text('LOGIN'),
+                // TODO(lusedou): l10n.loginForm
               );
       },
     );
@@ -124,6 +127,7 @@ class _SignUpButton extends StatelessWidget {
       onPressed: () {},
       child: Text(
         'CREATE ACCOUNT',
+        // TODO(LUSEDOU): l10n.loginFormSingUpText
         style: TextStyle(color: theme.primaryColor),
       ),
     );
