@@ -6,11 +6,12 @@
 // https://opensource.org/licenses/MIT.
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:images_repository/images_repository.dart';
 import 'package:local_storage_images_api/local_storage_images_api.dart';
+import 'package:super_gallery/gallery/gallery.dart';
 import 'package:super_gallery/l10n/l10n.dart';
-import 'package:super_gallery/upload/upload.dart';
 
 class App extends StatelessWidget {
   const App({super.key});
@@ -29,10 +30,11 @@ class App extends StatelessWidget {
         GlobalMaterialLocalizations.delegate,
       ],
       supportedLocales: AppLocalizations.supportedLocales,
-      home: UploadPage(
-        imagesRepository: CacheImagesRepository(
+      home: RepositoryProvider(
+        create: (context) => CacheImagesRepository(
           localStorageApi: LocalStorageImagesApi()..init(),
         ),
+        child: const GalleryPage(),
       ),
     );
   }
