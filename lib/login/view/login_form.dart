@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
+import 'package:super_gallery/app/cubit/app_cubit.dart';
 import 'package:super_gallery/login/login.dart';
 
 class LoginForm extends StatelessWidget {
@@ -108,7 +109,9 @@ class _LoginButton extends StatelessWidget {
                   primary: const Color(0xFFFFD600),
                 ),
                 onPressed: state.status.isValidated
-                    ? () => context.read<LoginCubit>().logIn()
+                    ? () => context
+                      ..read<LoginCubit>().logIn()
+                      ..read<AppCubit>().authentication()
                     : null,
                 child: const Text('LOGIN'),
                 // TODO(lusedou): l10n.loginForm
