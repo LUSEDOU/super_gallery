@@ -4,7 +4,7 @@ import 'package:images_api/images_api.dart';
 /// {@template local_storage}
 /// A local storage implemented with Hive package
 /// {@endtemplate}
-class LocalStorageImagesApi implements LocalStorageApi{
+class LocalStorageImagesApi implements LocalStorageApi {
   /// The storage
   late Box<dynamic> hiveBox;
 
@@ -22,8 +22,7 @@ class LocalStorageImagesApi implements LocalStorageApi{
 
   /// Remove the [key] from the storage
   @override
-  Future<void> remove(String key) async 
-      => hiveBox.delete(key);
+  Future<void> remove(String key) async => hiveBox.delete(key);
 
   /// Get the associated value from the storage
   @override
@@ -39,8 +38,7 @@ class LocalStorageImagesApi implements LocalStorageApi{
 
   /// Write the key/value in the storage
   @override
-  Future<void> write(String key, dynamic data) 
-      => hiveBox.put(key, data);
+  Future<void> write(String key, dynamic data) => hiveBox.put(key, data);
 
   /// Delete all the data in the storage
   @override

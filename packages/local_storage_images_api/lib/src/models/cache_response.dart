@@ -3,7 +3,7 @@ import 'package:images_api/images_api.dart';
 /// {@template cache_response}
 /// A response from the cache
 /// {@endtemplate}
-class CacheResponse implements ApiResponse<dynamic>{
+class CacheResponse implements ApiResponse<dynamic> {
   /// {@macro cache_response}
   const CacheResponse({
     required this.data,
@@ -22,6 +22,7 @@ class CacheResponse implements ApiResponse<dynamic>{
   }
 
   @override
+
   /// The data contained by the response
   final dynamic data;
 }
