@@ -4,17 +4,15 @@ import 'package:images_repository/images_repository.dart';
 import 'package:super_gallery/upload/upload.dart';
 
 class UploadPage extends StatelessWidget {
-  const UploadPage({
-    required this.imagesRepository,
-    super.key,
-  });
+  const UploadPage({super.key});
 
-  final ImagesRepository imagesRepository;
+  static Page<void> page() => const MaterialPage<void>(child: UploadPage());
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => UploadBloc(imagesRepository: imagesRepository),
+      create: (context) =>
+          UploadBloc(imagesRepository: context.read<CacheImagesRepository>()),
       child: _UploadView(),
     );
   }
