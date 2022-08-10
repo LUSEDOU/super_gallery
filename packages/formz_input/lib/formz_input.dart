@@ -1,3 +1,5 @@
 library formz_input;
 
-export 'src/formz_input.dart';
+export 'src/confirmed_password.dart';
+export 'src/email.dart';
+export 'src/password.dart';
