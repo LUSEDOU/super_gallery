@@ -25,26 +25,44 @@ class _UploadView extends StatelessWidget {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
 
-    return Scaffold(
-      body: SafeArea(
-        child: Padding(
-          padding: EdgeInsets.all(size.width * 0.02),
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                _UploadForm(),
-                SizedBox(
-                  width: size.width * 0.04,
-                ),
-                _BigImage(),
-                SizedBox(
-                  width: size.width * 0.04,
-                ),
-              ],
+    return BlocListener<UploadBloc, UploadState>(
+      listener: (context, state) {
+        if (state.status == UploadStatus.failure) {
+          ScaffoldMessenger.of(context)
+            ..hideCurrentSnackBar()
+            ..showSnackBar(
+              SnackBar(
+                content: Text(state.errorMessage ?? 'Something wrong happened'),
+              ),
+            );
+        }
+      },
+      child: Scaffold(
+        body: SafeArea(
+          child: Padding(
+            padding: EdgeInsets.all(size.width * 0.02),
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  _UploadForm(),
+                  SizedBox(
+                    width: size.width * 0.04,
+                  ),
+                  _BigImage(),
+                  SizedBox(
+                    width: size.width * 0.04,
+                  ),
+                  _UploadImages()
+                ],
+              ),
             ),
           ),
+        ),
+        floatingActionButton: FloatingActionButton(
+          child: const Icon(Icons.browse_gallery_rounded),
+          onPressed: () {},
         ),
       ),
     );
@@ -62,22 +80,15 @@ class _BigImage extends StatelessWidget {
             : Image(
                 image: NetworkImage(
                   state.image,
-                ), /*
-          errorBuilder: (context, error, stackTrace) {
-            ScaffoldMessenger.of(context)
-              ..hideCurrentSnackBar()
-              ..showSnackBar(
-                const SnackBar(
-                  content: Text('URL wrong'),
                 ),
-              );
-            context.read<UploadBloc>().add(const UploadFailureLoad());
-            return const CircularProgressIndicator();
-          },
-          loadingBuilder: (context, child, loadingProgress) {
-            context.read<UploadBloc>().add(const UploadImageSaved());
-            return const CircularProgressIndicator();
-          },*/
+                errorBuilder: (context, error, stackTrace) {
+                  context.read<UploadBloc>().add(
+                        UploadFailureLoad(
+                          errorMessage: error.toString(),
+                        ),
+                      );
+                  return const SizedBox();
+                },
               );
       },
     );
@@ -141,27 +152,25 @@ class _UploadImages extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<UploadBloc, UploadState>(
       builder: (context, state) {
-        return Padding(
-          padding: const EdgeInsets.all(8),
-          child: ListView.separated(
-            scrollDirection: Axis.horizontal,
-            itemCount: 5,
-            itemBuilder: (context, index) => index >= state.urls.length
-                ? Container(
-                    color: Colors.red,
-                    height: 9,
-                    width: 9,
-                  )
-                : _SmallImage(
-                    image: state.urls[index],
-                    key: Key('SMALL_IMAGE_$index'),
+        List<Widget> _smallImage(int length) => List.generate(
+              length,
+              (index) => _SmallImage(
+                image: state.urls[index],
+              ),
+            );
+
+        final urlLength = state.urls.length;
+
+        return state.urls.isNotEmpty
+            ? SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  children: _smallImage(
+                    urlLength <= 5 ? urlLength : 5,
                   ),
-            separatorBuilder: (context, index) => const SizedBox(
-              width: 9,
-              height: 9,
-            ),
-          ),
-        );
+                ),
+              )
+            : const SizedBox();
       },
     );
   }

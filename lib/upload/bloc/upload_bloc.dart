@@ -65,7 +65,10 @@ class UploadBloc extends Bloc<UploadEvent, UploadState> {
     Emitter<UploadState> emit,
   ) {
     emit(
-      state.copyWith(status: UploadStatus.failure),
+      state.copyWith(
+        status: UploadStatus.failure,
+        errorMessage: event.errorMessage,
+      ),
     );
   }
 
